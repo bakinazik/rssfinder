@@ -2,7 +2,7 @@
 
 # RSS Finder
 
-Finds and lists RSS/Atom feeds on web pages in real time.
+Easily find the feed.
 
 ## Features:
 
