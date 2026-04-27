@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/screenshot.webp">
+
 # RSS Finder
 
 Finds and lists RSS/Atom feeds on web pages in real time.
