@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>RSS Finder</title>
+        <style>
+            :root {
+                --bg: #ffffff;
+                --card: #eeeeee;
+                --text: #111111;
+
+                --muted: #5f6368;
+                --border: #e8eaed;
+                --hover: #f1f3f4;
+
+                --primary: #faa501;
+                --primary-hover: #fb9400;
+
+                --success: #34a853;
+
+                --button-border: #dadce0;
+                --button-text: #3c4043;
+
+                --empty-icon: #dadce0;
+                --footer-text: #9aa0a6;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --bg: #222222;
+                    --text: #e8eaed;
+                    --card: #333333;
+                    --muted: #9aa0a6;
+                    --border: #444444;
+                    --hover: #444444;
+
+                    --primary: #faa501;
+                    --primary-hover: #fb9400;
+
+                    --button-border: #5f6368;
+                    --button-text: #e8eaed;
+
+                    --empty-icon: #3c4043;
+                    --footer-text: #5f6368;
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                text-decoration: none;
+            }
+            
+            a{
+            	color: var(--primary);
+            }
+            
+            a:hover{
+            	text-decoration: underline;
+            }
+
+            body {
+                font-family: sans-serif;
+                width: 360px;
+                padding: 16px;
+                background: var(--bg);
+                color: var(--text);
+                min-height: 250px;
+                font-size: 13px;
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            #status {
+                font-weight: 500;
+                color: var(--muted);
+            }
+
+            #refreshButton {
+                background: none;
+                border: 1px solid var(--border);
+                border-radius: 7px;
+                padding: 7px 15px;
+                font-size: 12px;
+                cursor: pointer;
+                color: var(--button-text);
+                transition: background 0.2s;
+            }
+
+            #refreshButton:hover {
+                background: var(--hover);
+            }
+
+            #refreshButton:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            #progressContainer {
+                height: 2px;
+                background: var(--border);
+                margin-bottom: 16px;
+                border-radius: 1px;
+                overflow: hidden;
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+            }
+
+            #progressBar {
+                width: 0%;
+                height: 100%;
+                background: var(--primary);
+                transition: width 0.2s ease;
+            }
+            
+			ul {
+			    list-style: none;
+			    max-height: 250px;
+			    overflow-y: auto;
+			    background: var(--card);
+			    height: 100vh;
+			    border-radius: 10px;
+			}
+
+			ul::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			ul::-webkit-scrollbar-track {
+				background: var(--border);
+				border-radius: 3px;
+			}
+
+			ul::-webkit-scrollbar-thumb {
+				background: var(--muted);
+				border-radius: 3px;
+			}
+
+			ul::-webkit-scrollbar-thumb:hover {
+				background: var(--primary);
+			}
+            
+
+            li {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 8px;
+                border-bottom: 1px solid var(--border);
+                transition: background 0.2s;
+            }
+
+            li:last-child {
+                border-bottom: none;
+            }
+
+            li:hover {
+                background: var(--hover);
+            }
+
+            .feed-icon {
+                width: 16px;
+                height: 16px;
+                color: #e37400;
+                flex-shrink: 0;
+            }
+
+            .feed-content {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .feed-title {
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--text);
+                margin-bottom: 2px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .feed-url {
+                font-size: 11px;
+                color: var(--muted);
+                text-decoration: none;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: block;
+            }
+
+            .feed-url:hover {
+                text-decoration: underline;
+                color: var(--primary-hover);
+            }
+
+			.copy-button {
+			    border-radius: 10px;
+			    width: 35px;
+			    height: 30px;
+			    display: flex;
+			    align-items: center;
+			    justify-content: center;
+			    cursor: pointer;
+			    color: var(--muted);
+			    transition: all 0.2s;
+			    flex-shrink: 0;
+			    background: var(--bg);
+			    border: none;
+			}
+
+            .copy-button:hover {
+                color: var(--primary);
+            }
+
+            .copy-button.copied {
+                background: var(--primary);
+                border-color: var(--primary);
+                color: var(--bg);
+            }
+
+            .copy-icon {
+                width: 16px;
+                height: 16px;
+            }
+            
+			.feed-dot {
+			    color: var(--primary);
+			    flex-shrink: 0;
+			    width: 15px;
+			    height: 15px;
+			}
+
+			.empty-state {
+			    text-align: center;
+			    padding: 55px 15px;
+			    color: var(--muted);
+			    font-size: 13px;
+			    justify-content: center;
+			    align-items: center;
+			    height: 100%;
+			}
+
+            .empty-icon {
+                width: 48px;
+                height: 48px;
+                color: var(--muted);
+                margin-bottom: 12px;
+            }
+            
+			footer {
+			    display: flex;
+			    flex-direction: row;
+			    align-items: center;
+			    justify-content: space-between;
+			    padding: 20px 0 0;
+			}
+			
+			footer p {
+			    display: flex;
+			    align-items: center;
+			    justify-content: center;
+			    gap: 5px;
+			}
+			
+			footer svg{
+				color: var(--primary);
+			}
+
+            #progressContainer:has(#progressBar[style*="width: 100%"]) {
+                display: none;
+            }
+
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to   { transform: rotate(360deg); }
+            }
+
+            .spinning {
+                animation: spin 1s linear infinite;
+                color: var(--primary);
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div id="status" data-i18n="statusScanning"></div>
+            <button id="refreshButton" data-i18n="buttonRefresh"></button>
+        </div>
+         
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
+
+        <ul id="rssLinks"></ul>
+
+        <div id="emptyState" class="empty-state">
+            <svg id="spinnerIcon" class="empty-icon spinning" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="40 20" stroke-linecap="round"/>
+            </svg>
+            <svg id="rssIcon" class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display:none">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M5 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M4 4a16 16 0 0 1 16 16M4 11a9 9 0 0 1 9 9"/>
+            </svg>
+        </div>
+        
+       <footer>
+			<p><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M4 4a16 16 0 0 1 16 16" /><path d="M4 11a9 9 0 0 1 9 9" /></svg><span>RSS Finder</span></p>
+			<a href="https://github.com/bakinazik/rssfinder" target="_blank" data-i18n="footerSourceCode"></a>
+       </footer>
+        
+        <script src="popup.js"></script>
+    </body>
+</html>
