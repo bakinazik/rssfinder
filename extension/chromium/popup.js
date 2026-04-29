@@ -197,7 +197,7 @@ function addFeedToList(feed) {
 
     const titleSpan = document.createElement('div');
     titleSpan.className = 'feed-title';
-    titleSpan.textContent = feed.title || i18n('feedDefaultTitle');
+    titleSpan.textContent = feed.source === 'guess' ? (i18n('feedGuessTitle') || 'Probable RSS') : (feed.title || i18n('feedDefaultTitle'));
 
     const link = document.createElement('a');
     link.className = 'feed-url';

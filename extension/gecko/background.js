@@ -31,7 +31,7 @@ async function verifyFeed(url) {
     }
 }
 
-function collectPotentialRSSFeeds(currentUrl) {
+function collectPotentialRSSFeeds(currentUrl, guessTitle) {
     const feeds = [];
     const foundUrls = new Set();
 
@@ -54,7 +54,7 @@ function collectPotentialRSSFeeds(currentUrl) {
     const commonPaths = ['/feed', '/rss', '/atom', '/rss.xml', '/atom.xml', '/index.xml', '/feed.xml'];
     const urlObj = new URL(currentUrl);
     commonPaths.forEach(path => {
-        try { addFeed(new URL(path, urlObj).href, 'Probable RSS', 'guess'); } catch (e) {}
+        try { addFeed(new URL(path, urlObj).href, guessTitle, 'guess'); } catch (e) {}
     });
 
     if (urlObj.hostname.includes('youtube.com')) {
@@ -223,7 +223,7 @@ async function startScanning(tabId, url) {
 
     try {
         const results = await browser.tabs.executeScript(tabId, {
-            code: `(${collectPotentialRSSFeeds.toString()})(${JSON.stringify(url)})`
+            code: `(${collectPotentialRSSFeeds.toString()})(${JSON.stringify(url)}, ${JSON.stringify(browser.i18n.getMessage('feedGuessTitle'))})`
         });
 
         const potentialFeeds = results[0] || [];
