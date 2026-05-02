@@ -94,7 +94,6 @@
         .brand-section h1 { font-size: 48px; margin: 0; font-weight: 800; }
         .brand-section p { font-size: 18px; color: var(--muted); margin: 5px 0; }
 
-        /* Sağ Taraf: Eklenti Widget */
         .plugin-widget {
             width: 360px;
             opacity: 0;
@@ -156,7 +155,6 @@
         .spinning { animation: spin 1s linear infinite; width: 48px; height: 48px; color: var(--primary); }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* BUTONLAR BÖLÜMÜ */
         .store-buttons {
             display: flex;
             gap: 20px;
@@ -178,15 +176,15 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 13px;
-            transition: all 0.2s ease;
+            transition: 0.2s all;
             border: 1px solid var(--border);
             background: transparent;
             color: var(--text);
         }
 
         .btn:hover {
-            background: var(--hover);
             color: var(--primary);
+			border-color: var(--primary);
         }
 
         .btn svg { width: 24px; height: 24px; }
