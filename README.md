@@ -1,5 +1,3 @@
-<a href="#"><img src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/screenshot.webp"></a>
-
 # RSS Finder
 
 Easily find the feed.
