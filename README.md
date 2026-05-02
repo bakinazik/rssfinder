@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/screenshot.webp">
+<img href="#" src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/screenshot.webp">
 
 # RSS Finder
 
