@@ -6,21 +6,18 @@ Easily find the feed.
 
 <table>
   <tr>
-    <th>Status: Awaiting approval (*)</th>
+    <th>Status: 1.0.1</th>
     <th>Status: 1.0.1</th>
   </tr>
   <tr>
     <td>
-      <a href="#"><img width="300" src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/dist/firefox-addons.webp" alt="Firefox Add-ons"></a>
+      <a href="https://addons.mozilla.org/en/firefox/addon/rss-finder-bn/"><img width="300" src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/dist/firefox-addons.webp" alt="Firefox Add-ons"></a>
     </td>
     <td>
       <a href="https://chromewebstore.google.com/detail/rss-finder/neodhllmmmmhfohbkeapdencnhegflfm"><img width="300" src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/dist/chrome-web-store.webp" alt="Chrome Web Store"></a>
     </td>
   </tr>
 </table>
-
-(*) “Awaiting approval” means the extension has been submitted to Firefox Add-ons and is currently waiting for Mozilla’s review and approval before publication.
-
 
 ## Features:
 
