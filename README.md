@@ -2,20 +2,11 @@
 
 Easily find the feed.
 
-<table>
-  <tr>
-    <th>Status: 1.0.1</th>
-    <th>Status: 1.0.1</th>
-  </tr>
-  <tr>
-    <td>
-      <a href="https://addons.mozilla.org/en/firefox/addon/rss-finder-bn/"><img width="300" src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/dist/firefox-addons.webp" alt="Firefox Add-ons"></a>
-    </td>
-    <td>
-      <a href="https://chromewebstore.google.com/detail/rss-finder/neodhllmmmmhfohbkeapdencnhegflfm"><img width="300" src="https://raw.githubusercontent.com/bakinazik/rssfinder/refs/heads/main/dist/chrome-web-store.webp" alt="Chrome Web Store"></a>
-    </td>
-  </tr>
-</table>
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/neodhllmmmmhfohbkeapdencnhegflfm.svg)](https://chromewebstore.google.com/detail/rss-finder/neodhllmmmmhfohbkeapdencnhegflfm)
+[![Firefox Add-ons](https://img.shields.io/amo/v/rss-finder-bn.svg)](https://addons.mozilla.org/en/firefox/addon/rss-finder-bn/)
+
+> [!NOTE]
+> This project is now in maintenance mode. Development will focus primarily on bug fixes, minor improvements, and general maintenance going forward. Feature requests and issue reports are still welcome and can be submitted through the repository's issue tracker.
 
 ## Features:
 
