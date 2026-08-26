@@ -4,9 +4,8 @@ Easily find the feed.
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/neodhllmmmmhfohbkeapdencnhegflfm.svg)](https://chromewebstore.google.com/detail/rss-finder/neodhllmmmmhfohbkeapdencnhegflfm)
 [![Firefox Add-ons](https://img.shields.io/amo/v/rss-finder-bn.svg)](https://addons.mozilla.org/en/firefox/addon/rss-finder-bn/)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-orange.svg)](https://buymeacoffee.com/bakinazik)
 
-> [!NOTE]
-> This project is now in maintenance mode. Development will focus primarily on bug fixes, minor improvements, and general maintenance going forward. Feature requests and issue reports are still welcome and can be submitted through the repository's issue tracker.
 
 ## Features:
 
