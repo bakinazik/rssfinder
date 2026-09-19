@@ -147,8 +147,61 @@ async function reportFeedFound(tabId, siteKey, url, tabData, feed) {
     browser.runtime.sendMessage({ action: 'feedFound', tabId, siteKey, feed }).catch(() => {});
 }
 
+const RESTRICTED_HOSTS = [
+    'chromewebstore.google.com',
+    'addons.mozilla.org',
+    'addons.cdn.mozilla.net',
+    'discovery.addons.mozilla.org',
+    'services.addons.mozilla.org',
+    'accounts-static.cdn.mozilla.net',
+    'accounts.firefox.com',
+    'api.accounts.firefox.com',
+    'oauth.accounts.firefox.com',
+    'profile.accounts.firefox.com',
+    'content.cdn.mozilla.net',
+    'install.mozilla.org',
+    'support.mozilla.org',
+    'sync.services.mozilla.com'
+];
+
+const EXPECTED_ERRORS = [
+    'No tab with id',
+    'Invalid tab ID',
+    'Cannot access',
+    'cannot be scripted',
+    'Missing host permission',
+    'showing error page',
+    'was removed',
+    'Frame with ID',
+    'The tab was closed',
+    'Receiving end does not exist',
+    'Extension context invalidated',
+    'Permission denied',
+    'moz-extension://'
+];
+
+function isRestrictedPage(url) {
+    try {
+        const { hostname, pathname } = new URL(url);
+
+        if (hostname === 'chrome.google.com' && pathname.startsWith('/webstore')) return true;
+        if (hostname === 'microsoftedge.microsoft.com' && pathname.startsWith('/addons')) return true;
+
+        return RESTRICTED_HOSTS.some(host => hostname === host);
+    } catch (e) {
+        return true;
+    }
+}
+
 function isScannableUrl(url) {
-    return typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://'));
+    if (typeof url !== 'string') return false;
+    if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
+    return !isRestrictedPage(url);
+}
+
+function isExpectedScanError(error) {
+    const message = String(error?.message || error || '');
+    return EXPECTED_ERRORS.some(part => message.includes(part));
 }
 
 async function startScanning(tabId, url) {
@@ -283,17 +336,8 @@ async function startScanning(tabId, url) {
         }).catch(() => {});
 
     } catch (error) {
-        const msg = error?.message || '';
-        const isSilent =
-            msg.includes('No tab with id') ||
-            msg.includes('Cannot access a chrome://') ||
-            msg.includes('Cannot access a chrome-extension://') ||
-            msg.includes('Cannot access contents of url') ||
-            msg.includes('Missing host permission') ||
-            msg.includes('Missing host permission for the tab') ||
-            msg.includes('moz-extension://');
-        if (!isSilent) {
-            console.error('Scan error:', error);
+        if (!isExpectedScanError(error)) {
+            console.debug('Scan error:', error);
         }
         if (await tabExists(tabId) && tabData) {
             tabData.isScanning = false;
@@ -303,26 +347,26 @@ async function startScanning(tabId, url) {
 }
 
 browser.webNavigation.onCompleted.addListener((details) => {
-    if (details.frameId === 0 && details.url.startsWith('http')) {
+    if (details.frameId === 0 && isScannableUrl(details.url)) {
         startScanning(details.tabId, details.url);
     }
 });
 
 browser.webNavigation.onHistoryStateUpdated.addListener((details) => {
-    if (details.frameId === 0 && details.url.startsWith('http')) {
+    if (details.frameId === 0 && isScannableUrl(details.url)) {
         setTimeout(() => startScanning(details.tabId, details.url), 500);
     }
 });
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.url?.startsWith('http')) {
+    if (isScannableUrl(changeInfo.url)) {
         startScanning(tabId, changeInfo.url);
     }
 });
 
 browser.tabs.onActivated.addListener((activeInfo) => {
     browser.tabs.get(activeInfo.tabId).then((tab) => {
-        if (!tab?.url?.startsWith('http')) return;
+        if (!isScannableUrl(tab?.url)) return;
         storageGet([`rssFeeds_${activeInfo.tabId}`]).then((result) => {
             const data = result[`rssFeeds_${activeInfo.tabId}`];
             const currentSiteKey = getSiteKey(tab.url);

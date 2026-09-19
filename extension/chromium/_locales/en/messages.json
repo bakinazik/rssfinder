@@ -19,6 +19,10 @@
         "message": "No feeds found",
         "description": "Status shown when no feeds are found"
     },
+    "statusUnsupportedPage": {
+        "message": "Doesn't work on this page",
+        "description": "Status shown on browser-internal pages (chrome://, about:, etc.)"
+    },
     "statusFound": {
         "message": "$COUNT$ feed(s) found",
         "description": "Number of feeds found",
@@ -49,10 +53,6 @@
         "message": "Probable RSS",
         "description": "Feed title for guessed paths"
     },
-    "footerSourceCode": {
-        "message": "Source code",
-        "description": "Footer source code link"
-    },
     "debugCheckError": {
         "message": "Check error:",
         "description": "Console debug message"
@@ -64,5 +64,63 @@
     "debugCopyError": {
         "message": "Copy error:",
         "description": "Console copy error message"
+    },
+    "selectAll": {
+        "message": "Select all",
+        "description": "Select all feeds checkbox"
+    },
+    "selectedCount": {
+        "message": "$COUNT$/$TOTAL$ selected",
+        "description": "Selected feeds out of all found",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            },
+            "total": {
+                "content": "$2",
+                "example": "6"
+            }
+        }
+    },
+    "exportOpml": {
+        "message": "Export as OPML ($COUNT$)",
+        "description": "OPML export button",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "exportDone": {
+        "message": "Saved",
+        "description": "Shown after the OPML file is saved"
+    },
+    "copyLinks": {
+        "message": "Copy links",
+        "description": "Copy feed links button"
+    },
+    "opmlTitle": {
+        "message": "Feeds from $HOST$",
+        "description": "Title inside the exported OPML file",
+        "placeholders": {
+            "host": {
+                "content": "$1",
+                "example": "example.com"
+            }
+        }
+    },
+    "buttonSelect": {
+        "message": "Select",
+        "description": "Enter selection mode"
+    },
+    "buttonCancel": {
+        "message": "Cancel",
+        "description": "Leave selection mode"
+    },
+    "copiedLabel": {
+        "message": "Copied",
+        "description": "Shown after links are copied"
     }
 }

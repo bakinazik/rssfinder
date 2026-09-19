@@ -19,6 +19,10 @@
         "message": "Bağlantı bulunamadı",
         "description": "Hiç besleme bulunamazsa gösterilen durum"
     },
+    "statusUnsupportedPage": {
+        "message": "Bu sayfada çalışmaz",
+        "description": "Tarayıcının kendi sayfalarında (chrome://, about: vb.) gösterilen durum"
+    },
     "statusFound": {
         "message": "$COUNT$ besleme bulundu",
         "description": "Bulunan besleme sayısı",
@@ -49,10 +53,6 @@
         "message": "Tahmini RSS",
         "description": "Tahmin edilen yollar için besleme başlığı"
     },
-    "footerSourceCode": {
-        "message": "Kaynak kodu",
-        "description": "Footer kaynak kodu bağlantısı"
-    },
     "debugCheckError": {
         "message": "Kontrol hatası:",
         "description": "Console debug mesajı"
@@ -64,5 +64,63 @@
     "debugCopyError": {
         "message": "Kopyalama hatası:",
         "description": "Console kopyalama hata mesajı"
+    },
+    "selectAll": {
+        "message": "Tümünü seç",
+        "description": "Tüm beslemeleri seç kutusu"
+    },
+    "selectedCount": {
+        "message": "$COUNT$/$TOTAL$ seçili",
+        "description": "Bulunanlar içinden seçili besleme sayısı",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            },
+            "total": {
+                "content": "$2",
+                "example": "6"
+            }
+        }
+    },
+    "exportOpml": {
+        "message": "OPML olarak aktar ($COUNT$)",
+        "description": "OPML dışa aktarma düğmesi",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "exportDone": {
+        "message": "Kaydedildi",
+        "description": "OPML dosyası kaydedilince gösterilir"
+    },
+    "copyLinks": {
+        "message": "Bağlantıları kopyala",
+        "description": "Besleme bağlantılarını kopyala düğmesi"
+    },
+    "opmlTitle": {
+        "message": "$HOST$ beslemeleri",
+        "description": "Dışa aktarılan OPML dosyasının başlığı",
+        "placeholders": {
+            "host": {
+                "content": "$1",
+                "example": "example.com"
+            }
+        }
+    },
+    "buttonSelect": {
+        "message": "Seç",
+        "description": "Seçim moduna geç"
+    },
+    "buttonCancel": {
+        "message": "İptal",
+        "description": "Seçim modundan çık"
+    },
+    "copiedLabel": {
+        "message": "Kopyalandı",
+        "description": "Bağlantılar kopyalanınca gösterilir"
     }
 }

@@ -22,7 +22,6 @@
                 --button-text: #3c4043;
 
                 --empty-icon: #dadce0;
-                --footer-text: #9aa0a6;
             }
 
             @media (prefers-color-scheme: dark) {
@@ -41,7 +40,6 @@
                     --button-text: #e8eaed;
 
                     --empty-icon: #3c4043;
-                    --footer-text: #5f6368;
                 }
             }
 
@@ -51,13 +49,17 @@
                 padding: 0;
                 text-decoration: none;
             }
-            
-            a{
-            	color: var(--primary);
+
+            [hidden] {
+                display: none !important;
             }
-            
-            a:hover{
-            	text-decoration: underline;
+
+            a {
+                color: var(--primary);
+            }
+
+            a:hover {
+                text-decoration: underline;
             }
 
             body {
@@ -77,12 +79,17 @@
                 margin-bottom: 16px;
             }
 
+            .header-actions {
+                display: flex;
+                gap: 8px;
+            }
+
             #status {
                 font-weight: 500;
                 color: var(--muted);
             }
 
-            #refreshButton {
+            .btn {
                 background: none;
                 border: 1px solid var(--border);
                 border-radius: 7px;
@@ -93,13 +100,25 @@
                 transition: background 0.2s;
             }
 
-            #refreshButton:hover {
+            .btn:hover:not(:disabled) {
                 background: var(--hover);
             }
 
-            #refreshButton:disabled {
+            .btn:disabled {
                 opacity: 0.5;
                 cursor: not-allowed;
+            }
+
+            .btn.primary {
+                background: var(--primary);
+                border-color: var(--primary);
+                color: #111111;
+                font-weight: 600;
+            }
+
+            .btn.primary:hover:not(:disabled) {
+                background: var(--primary-hover);
+                border-color: var(--primary-hover);
             }
 
             #progressContainer {
@@ -120,36 +139,47 @@
                 background: var(--primary);
                 transition: width 0.2s ease;
             }
-            
-			ul {
-			    list-style: none;
-			    max-height: 250px;
-			    overflow-y: auto;
-			    background: var(--card);
-			    height: 100vh;
-			    border-radius: 10px;
-			}
 
-			ul::-webkit-scrollbar {
-				width: 6px;
-			}
+            #progressContainer:has(#progressBar[style*="width: 100%"]) {
+                display: none;
+            }
 
-			ul::-webkit-scrollbar-track {
-				background: var(--border);
-				border-radius: 3px;
-			}
+            #card {
+                display: flex;
+                flex-direction: column;
+                height: 250px;
+                background: var(--card);
+                border-radius: 10px;
+                overflow: hidden;
+            }
 
-			ul::-webkit-scrollbar-thumb {
-				background: var(--muted);
-				border-radius: 3px;
-			}
+            ul {
+                flex: 1;
+                min-height: 0;
+                list-style: none;
+                overflow-y: auto;
+            }
 
-			ul::-webkit-scrollbar-thumb:hover {
-				background: var(--primary);
-			}
-            
+            ul::-webkit-scrollbar {
+                width: 6px;
+            }
 
-            li {
+            ul::-webkit-scrollbar-track {
+                background: var(--border);
+                border-radius: 3px;
+            }
+
+            ul::-webkit-scrollbar-thumb {
+                background: var(--muted);
+                border-radius: 3px;
+            }
+
+            ul::-webkit-scrollbar-thumb:hover {
+                background: var(--primary);
+            }
+
+            li,
+            .select-all {
                 display: flex;
                 align-items: center;
                 gap: 12px;
@@ -162,15 +192,69 @@
                 border-bottom: none;
             }
 
-            li:hover {
+            li:hover,
+            .select-all:hover {
                 background: var(--hover);
             }
 
-            .feed-icon {
-                width: 16px;
-                height: 16px;
-                color: #e37400;
+            .select-all {
                 flex-shrink: 0;
+                font-size: 12px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            #selectedCount {
+                margin-left: auto;
+                padding-right: 4px;
+                color: var(--muted);
+            }
+
+            input[type='checkbox'] {
+                width: 15px;
+                height: 15px;
+                accent-color: var(--primary);
+                cursor: pointer;
+                flex-shrink: 0;
+            }
+
+            .feed-check {
+                display: none;
+            }
+
+            .feed-dot {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 15px;
+                height: 15px;
+                flex-shrink: 0;
+            }
+
+            .feed-dot::after {
+                content: '';
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--primary);
+            }
+
+            .select-mode li {
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .select-mode .feed-check {
+                display: block;
+            }
+
+            .select-mode .feed-dot,
+            .select-mode .copy-button {
+                display: none;
+            }
+
+            .select-mode .feed-url {
+                pointer-events: none;
             }
 
             .feed-content {
@@ -191,7 +275,6 @@
             .feed-url {
                 font-size: 11px;
                 color: var(--muted);
-                text-decoration: none;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -203,20 +286,20 @@
                 color: var(--primary-hover);
             }
 
-			.copy-button {
-			    border-radius: 10px;
-			    width: 35px;
-			    height: 30px;
-			    display: flex;
-			    align-items: center;
-			    justify-content: center;
-			    cursor: pointer;
-			    color: var(--muted);
-			    transition: all 0.2s;
-			    flex-shrink: 0;
-			    background: var(--bg);
-			    border: none;
-			}
+            .copy-button {
+                border-radius: 10px;
+                width: 35px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                color: var(--muted);
+                transition: all 0.2s;
+                flex-shrink: 0;
+                background: var(--bg);
+                border: none;
+            }
 
             .copy-button:hover {
                 color: var(--primary);
@@ -228,56 +311,44 @@
                 color: var(--bg);
             }
 
-            .copy-icon {
+            .icon {
                 width: 16px;
                 height: 16px;
             }
-            
-			.feed-dot {
-			    color: var(--primary);
-			    flex-shrink: 0;
-			    width: 15px;
-			    height: 15px;
-			}
 
-			.empty-state {
-			    text-align: center;
-			    padding: 55px 15px;
-			    color: var(--muted);
-			    font-size: 13px;
-			    justify-content: center;
-			    align-items: center;
-			    height: 100%;
-			}
+            #emptyState {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: var(--muted);
+                font-size: 13px;
+            }
 
             .empty-icon {
                 width: 48px;
                 height: 48px;
                 color: var(--muted);
-                margin-bottom: 12px;
             }
-            
-			footer {
-			    display: flex;
-			    flex-direction: row;
-			    align-items: center;
-			    justify-content: space-between;
-			    padding: 20px 0 0;
-			}
-			
-			footer p {
-			    display: flex;
-			    align-items: center;
-			    justify-content: center;
-			    gap: 5px;
-			}
-			
-			footer svg{
-				color: var(--primary);
-			}
 
-            #progressContainer:has(#progressBar[style*="width: 100%"]) {
-                display: none;
+            .actions {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                margin-top: 12px;
+            }
+
+            .icon-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 34px;
+                padding: 0;
+            }
+
+            .btn.active {
+                color: var(--primary);
             }
 
             @keyframes spin {
@@ -289,36 +360,46 @@
                 animation: spin 1s linear infinite;
                 color: var(--primary);
             }
-            
         </style>
     </head>
     <body>
         <div class="header">
             <div id="status" data-i18n="statusScanning"></div>
-            <button id="refreshButton" data-i18n="buttonRefresh"></button>
+            <div class="header-actions">
+                <button id="refreshButton" class="btn" data-i18n="buttonRefresh"></button>
+            </div>
         </div>
-         
+
         <div id="progressContainer">
             <div id="progressBar"></div>
         </div>
 
-        <ul id="rssLinks"></ul>
+        <div id="card">
+            <label id="selectAllRow" class="select-all" hidden>
+                <input id="selectAll" type="checkbox" />
+                <span data-i18n="selectAll"></span>
+                <span id="selectedCount"></span>
+            </label>
 
-        <div id="emptyState" class="empty-state">
-            <svg id="spinnerIcon" class="empty-icon spinning" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="40 20" stroke-linecap="round"/>
-            </svg>
-            <svg id="rssIcon" class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display:none">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M5 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M4 4a16 16 0 0 1 16 16M4 11a9 9 0 0 1 9 9"/>
-            </svg>
+            <ul id="rssLinks" hidden></ul>
+
+            <div id="emptyState">
+                <svg id="spinnerIcon" class="empty-icon spinning" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="40 20" stroke-linecap="round" />
+                </svg>
+                <svg id="rssIcon" class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: none">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M5 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M4 4a16 16 0 0 1 16 16M4 11a9 9 0 0 1 9 9" />
+                </svg>
+            </div>
         </div>
-        
-       <footer>
-			<p><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M4 4a16 16 0 0 1 16 16" /><path d="M4 11a9 9 0 0 1 9 9" /></svg><span>RSS Finder</span></p>
-			<a href="https://github.com/bakinazik/rssfinder" target="_blank" data-i18n="footerSourceCode"></a>
-       </footer>
-        
+
+        <div id="actions" class="actions">
+            <button id="selectToggle" class="btn icon-btn"></button>
+            <button id="copyAll" class="btn icon-btn"></button>
+            <button id="exportOpml" class="btn icon-btn primary"></button>
+        </div>
+
         <script src="popup.js"></script>
     </body>
 </html>
