@@ -23,7 +23,10 @@
             --hover: #f1f3f4;
             --primary: #faa501;
             --primary-hover: #fb9400;
+            --success: #34a853;
+            --button-border: #dadce0;
             --button-text: #3c4043;
+            --empty-icon: #dadce0;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -35,7 +38,10 @@
                 --border: #444444;
                 --hover: #444444;
                 --primary: #faa501;
+                --primary-hover: #fb9400;
+                --button-border: #5f6368;
                 --button-text: #e8eaed;
+                --empty-icon: #3c4043;
             }
         }
 
@@ -94,6 +100,12 @@
 
         .plugin-widget {
             width: 360px;
+            box-sizing: border-box;
+            padding: 16px;
+            color: var(--text);
+            font-size: 13px;
+            border-radius: 16px;
+            position: relative;
             opacity: 0;
             transform: translateY(30px);
             animation: slideUp 0.8s ease-out 1.4s forwards;
@@ -101,57 +113,243 @@
 
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
 
-        .header {
+        .plugin-widget * {
+            box-sizing: border-box;
+        }
+
+        .plugin-widget [hidden] {
+            display: none !important;
+        }
+
+        .plugin-widget a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .plugin-widget a:hover {
+            text-decoration: underline;
+        }
+
+        .plugin-widget .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
         }
 
-        #status { font-weight: 500; color: var(--muted); font-size: 13px; }
-
-        #refreshButton {
-            background: none; border: 1px solid var(--border); border-radius: 7px;
-            padding: 7px 15px; font-size: 12px; cursor: pointer; color: var(--button-text);
+        .plugin-widget .header-actions {
+            display: flex;
+            gap: 8px;
         }
 
-        ul#rssLinks {
-            list-style: none;
-            max-height: 250px;
-            overflow: hidden;
+        .plugin-widget #status { font-weight: 500; color: var(--muted); font-size: 13px; }
+
+        .plugin-widget .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: none;
+            gap: 0;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 7px 15px;
+            font-size: 12px;
+            font-weight: 400;
+            text-decoration: none;
+            cursor: pointer;
+            color: var(--button-text);
+            transition: background 0.2s;
+        }
+
+        .plugin-widget .btn:hover:not(:disabled) { background: var(--hover); }
+        .plugin-widget .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .plugin-widget .btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #111111;
+            font-weight: 600;
+        }
+
+        .plugin-widget .btn.primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .plugin-widget .btn.active { color: var(--primary); }
+
+        .plugin-widget .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 34px;
+            padding: 0;
+        }
+
+        .plugin-widget .icon { width: 16px; height: 16px; }
+
+        .plugin-widget #card {
+            display: flex;
+            flex-direction: column;
+            height: 250px;
             background: var(--card);
             border-radius: 10px;
-            padding: 0;
+            overflow: hidden;
+        }
+
+        .plugin-widget ul {
+            flex: 1;
+            min-height: 0;
+            list-style: none;
             margin: 0;
-            min-height: 200px;
+            padding: 0;
+            overflow-y: auto;
         }
 
-        li {
-            display: flex; align-items: center; gap: 12px; padding: 12px;
+        .plugin-widget ul::-webkit-scrollbar { width: 6px; }
+        .plugin-widget ul::-webkit-scrollbar-track { background: var(--border); border-radius: 3px; }
+        .plugin-widget ul::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+        .plugin-widget ul::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        .plugin-widget li,
+        .plugin-widget .select-all {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
             border-bottom: 1px solid var(--border);
-            opacity: 0; transform: translateY(10px);
+            transition: background 0.2s;
         }
-        li:last-child { border-bottom: none; }
 
-        li.show { animation: itemIn 0.4s ease-out forwards; }
+        .plugin-widget li { opacity: 0; transform: translateY(10px); }
+        .plugin-widget li.show { animation: itemIn 0.4s ease-out forwards; }
         @keyframes itemIn { to { opacity: 1; transform: translateY(0); } }
 
-        .feed-dot { color: var(--primary); width: 15px; height: 15px; flex-shrink: 0; }
-        .feed-content { flex: 1; min-width: 0; }
-        .feed-title { font-size: 12px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;display: flex ;}
-        .feed-url { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; }
-        
-        .copy-button {
-            width: 35px; height: 30px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--muted); background: var(--bg); border: none; border-radius: 8px;
+        .plugin-widget li:last-child { border-bottom: none; }
+        .plugin-widget li:hover,
+        .plugin-widget .select-all:hover { background: var(--hover); }
+
+        .plugin-widget .select-all {
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
         }
 
-        .empty-state {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 180px; color: var(--muted);
+        .plugin-widget #selectedCount {
+            margin-left: auto;
+            padding-right: 4px;
+            color: var(--muted);
         }
-        .spinning { animation: spin 1s linear infinite; width: 48px; height: 48px; color: var(--primary); }
+
+        .plugin-widget input[type='checkbox'] {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .plugin-widget .feed-check { display: none; }
+
+        .plugin-widget .feed-dot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+        }
+
+        .plugin-widget .feed-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .plugin-widget .select-mode li { cursor: pointer; user-select: none; }
+        .plugin-widget .select-mode .feed-check { display: block; }
+        .plugin-widget .select-mode .feed-dot,
+        .plugin-widget .select-mode .copy-button { display: none; }
+        .plugin-widget .select-mode .feed-url { pointer-events: none; }
+
+        .plugin-widget .feed-content { flex: 1; min-width: 0; }
+
+        .plugin-widget .feed-title {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .plugin-widget .feed-url {
+            font-size: 11px;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .plugin-widget .feed-url:hover {
+            text-decoration: underline;
+            color: var(--primary-hover);
+        }
+
+        .plugin-widget .copy-button {
+            border-radius: 10px;
+            width: 35px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.2s;
+            flex-shrink: 0;
+            background: var(--bg);
+            border: none;
+        }
+
+        .plugin-widget .copy-button:hover { color: var(--primary); }
+
+        .plugin-widget .copy-button.copied {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg);
+        }
+
+        .plugin-widget #emptyState {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .plugin-widget .empty-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--muted);
+        }
+
+        .plugin-widget .actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .plugin-widget .spinning { animation: spin 1s linear infinite; color: var(--primary); }
 
         .store-buttons {
             display: flex;
@@ -213,12 +411,8 @@
             .hero-section { gap: 30px; flex-direction: column; text-align: center; }
             .brand-section { transform: translateY(-20px); animation: itemIn 0.8s ease-out 0.8s forwards; }
             .store-buttons { flex-direction: column; align-items: center; width: 360px; }
-            .btn { width: 100%; box-sizing: border-box; }
+            .store-buttons .btn { width: 100%; box-sizing: border-box; }
         }
-
-        ul::-webkit-scrollbar { width: 6px; }
-        ul::-webkit-scrollbar-track { background: var(--border); border-radius: 3px; }
-        ul::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -235,23 +429,43 @@
 
             <div class="plugin-widget">
                 <div class="header">
-                    <div id="status">Scanning...</div>
-                    <button id="refreshButton">Refresh</button>
+                    <div id="status">Scanning page...</div>
+                    <div class="header-actions">
+                        <button id="refreshButton" class="btn">Refresh</button>
+                    </div>
                 </div>
 
-                <ul id="rssLinks">
-                    <div id="emptyState" class="empty-state">
-                        <svg class="spinning" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="40 20" stroke-linecap="round"/>
+                <div id="card">
+                    <label id="selectAllRow" class="select-all" hidden>
+                        <input id="selectAll" type="checkbox" />
+                        <span>Select all</span>
+                        <span id="selectedCount"></span>
+                    </label>
+
+                    <ul id="rssLinks" hidden></ul>
+
+                    <div id="emptyState">
+                        <svg id="spinnerIcon" class="empty-icon spinning" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="40 20" stroke-linecap="round" />
+                        </svg>
+                        <svg id="rssIcon" class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M5 19m-1 0a1 1 0 1 0 2 0a1 1 0 0 0 -2 0M4 4a16 16 0 0 1 16 16M4 11a9 9 0 0 1 9 9" />
                         </svg>
                     </div>
-                </ul>
+                </div>
+
+                <div id="actions" class="actions">
+                    <button id="selectToggle" class="btn icon-btn"></button>
+                    <button id="copyAll" class="btn icon-btn"></button>
+                    <button id="exportOpml" class="btn icon-btn primary"></button>
+                </div>
             </div>
         </div>
 
         <div class="store-buttons">
             <a href="https://chromewebstore.google.com/detail/rss-finder/neodhllmmmmhfohbkeapdencnhegflfm" class="btn" target="_blank">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-chrome"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M12 9h8.4" /><path d="M14.598 13.5l-4.2 7.275" /><path d="M9.402 13.5l-4.2 -7.275" /></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-chrome"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M12 9h8.4" /><path d="M14.598 13.5l-4.2 7.275" /><path d="M9.402 13.5l-4.2 -7.275" /></svg>
                 Chrome Web Store
             </a>
             <a href="https://addons.mozilla.org/en-US/firefox/addon/rss-finder-bn/" class="btn" target="_blank">
@@ -267,45 +481,309 @@
     </div>
 
     <script>
-        const feeds = [
+        const DEMO_FEEDS = [
             { title: "ScienceAlert Google News", url: "https://www.sciencealert.com/feed/gn/" },
             { title: "ScienceAlert Microsoft News", url: "https://www.sciencealert.com/feed/msft/" },
             { title: "ScienceAlert Microsoft Video", url: "https://www.sciencealert.com/feed/msft-video/" },
             { title: "ScienceAlert Samsung News", url: "https://www.sciencealert.com/feed/sn/" },
         ];
 
-        const list = document.getElementById('rssLinks');
-        const status = document.getElementById('status');
-        const emptyState = document.getElementById('emptyState');
-        let count = 0;
+        const SVG_NS = 'http://www.w3.org/2000/svg';
 
-        const SVG = {
-            dot: `<svg viewBox="0 0 24 24" fill="none" class="feed-dot"><circle cx="12" cy="12" r="6" fill="currentColor"/></svg>`,
-            copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666"></path><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"></path></svg>`
+        const ICONS = {
+            copy: [
+                'M7 9.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667l0 -8.666',
+                'M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1'
+            ],
+            check: ['M5 12l5 5l9 -9'],
+            close: ['M18 6l-12 12', 'M6 6l12 12'],
+            checklist: [
+                'M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8',
+                'M14 19l2 2l4 -4',
+                'M9 8h4',
+                'M9 12h2'
+            ],
+            download: [
+                'M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2',
+                'M7 11l5 5l5 -5',
+                'M12 4l0 12'
+            ]
         };
 
-        window.onload = () => {
-            setTimeout(() => {
-                emptyState.style.display = 'none';
-                feeds.forEach((feed, i) => {
-                    setTimeout(() => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            ${SVG.dot}
-                            <div class="feed-content">
-                                <div class="feed-title">${feed.title}</div>
-                                <span class="feed-url">${feed.url}</span>
-                            </div>
-                            <button class="copy-button">${SVG.copy}</button>
-                        `;
-                        list.appendChild(li);
-                        requestAnimationFrame(() => li.classList.add('show'));
-                        count++;
-                        status.innerText = `${count} feed(s) found`;
-                    }, i * 150);
+        const $ = id => document.getElementById(id);
+
+        function createIcon(name) {
+            const svg = document.createElementNS(SVG_NS, 'svg');
+            svg.setAttribute('viewBox', '0 0 24 24');
+            svg.setAttribute('fill', 'none');
+            svg.setAttribute('stroke', 'currentColor');
+            svg.setAttribute('stroke-width', name === 'check' ? '2.5' : '2');
+            svg.setAttribute('stroke-linecap', 'round');
+            svg.setAttribute('stroke-linejoin', 'round');
+            svg.setAttribute('class', 'icon');
+
+            ICONS[name].forEach(d => {
+                const path = document.createElementNS(SVG_NS, 'path');
+                path.setAttribute('d', d);
+                svg.appendChild(path);
+            });
+
+            return svg;
+        }
+
+        function setButton(button, icon, label) {
+            button.title = label;
+            button.setAttribute('aria-label', label);
+
+            if (button.dataset.icon !== icon) {
+                button.dataset.icon = icon;
+                button.replaceChildren(createIcon(icon));
+            }
+        }
+
+        function flash(button, icon, label) {
+            button.dataset.flash = '1';
+            setButton(button, icon, label);
+            clearTimeout(button.flashTimer);
+            button.flashTimer = setTimeout(() => {
+                delete button.dataset.flash;
+                updateSelectionUI();
+            }, 1800);
+        }
+
+        function escapeXml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        }
+
+        function downloadFile(content, filename, type) {
+            const url = URL.createObjectURL(new Blob([content], { type }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        const feeds = [];
+        const selected = new Set();
+        let selectMode = false;
+
+        function targetFeeds() {
+            return selectMode ? feeds.filter(feed => selected.has(feed.url)) : feeds;
+        }
+
+        function setSelectMode(on) {
+            selectMode = on;
+            $('card').classList.toggle('select-mode', on);
+
+            if (!on) {
+                selected.clear();
+                document.querySelectorAll('#rssLinks .feed-check').forEach(box => {
+                    box.checked = false;
                 });
-            }, 1800); 
-        };
+            }
+
+            updateSelectionUI();
+        }
+
+        function updateSelectionUI() {
+            const total = feeds.length;
+            const count = selected.size;
+            const targetCount = selectMode ? count : total;
+
+            $('selectToggle').disabled = total === 0;
+            $('selectToggle').classList.toggle('active', selectMode);
+            setButton($('selectToggle'), selectMode ? 'close' : 'checklist', selectMode ? 'Cancel' : 'Select');
+            $('selectAllRow').hidden = !selectMode || total === 0;
+            $('selectedCount').textContent = `${count}/${total} selected`;
+
+            const selectAll = $('selectAll');
+            selectAll.checked = total > 0 && count === total;
+            selectAll.indeterminate = count > 0 && count < total;
+
+            $('exportOpml').disabled = targetCount === 0;
+            $('copyAll').disabled = targetCount === 0;
+
+            if (!$('exportOpml').dataset.flash) setButton($('exportOpml'), 'download', `Export as OPML (${targetCount})`);
+            if (!$('copyAll').dataset.flash) setButton($('copyAll'), 'copy', 'Copy links');
+        }
+
+        function addFeedToList(feed) {
+            feeds.push(feed);
+
+            const li = document.createElement('li');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'feed-check';
+            checkbox.addEventListener('click', e => e.stopPropagation());
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) selected.add(feed.url);
+                else selected.delete(feed.url);
+                updateSelectionUI();
+            });
+
+            const dot = document.createElement('span');
+            dot.className = 'feed-dot';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'feed-content';
+
+            const titleSpan = document.createElement('div');
+            titleSpan.className = 'feed-title';
+            titleSpan.textContent = feed.title;
+
+            const link = document.createElement('a');
+            link.className = 'feed-url';
+            link.href = feed.url;
+            link.textContent = feed.url;
+            link.target = '_blank';
+
+            contentDiv.appendChild(titleSpan);
+            contentDiv.appendChild(link);
+
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.title = 'Copy';
+            copyButton.appendChild(createIcon('copy'));
+
+            copyButton.addEventListener('click', async e => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                try {
+                    await navigator.clipboard.writeText(feed.url);
+                    copyButton.classList.add('copied');
+                    copyButton.replaceChildren(createIcon('check'));
+
+                    setTimeout(() => {
+                        copyButton.classList.remove('copied');
+                        copyButton.replaceChildren(createIcon('copy'));
+                    }, 2000);
+                } catch (err) {}
+            });
+
+            li.addEventListener('click', () => {
+                if (selectMode) checkbox.click();
+            });
+
+            li.appendChild(checkbox);
+            li.appendChild(dot);
+            li.appendChild(contentDiv);
+            li.appendChild(copyButton);
+
+            $('rssLinks').appendChild(li);
+            requestAnimationFrame(() => li.classList.add('show'));
+
+            updateUI(feeds.length, feeds.length < DEMO_FEEDS.length);
+        }
+
+        function updateUI(count, isScanning) {
+            $('rssLinks').hidden = count === 0;
+            $('emptyState').hidden = count > 0;
+
+            if (count === 0) {
+                $('status').textContent = isScanning ? 'Scanning page...' : 'No feeds found';
+                $('spinnerIcon').style.display = isScanning ? 'block' : 'none';
+                $('rssIcon').style.display = isScanning ? 'none' : 'block';
+            } else {
+                $('status').textContent = `${count} feed(s) found`;
+            }
+
+            updateSelectionUI();
+        }
+
+        function resetList() {
+            $('rssLinks').replaceChildren();
+            feeds.length = 0;
+            selected.clear();
+            selectMode = false;
+            $('card').classList.remove('select-mode');
+            updateUI(0, true);
+        }
+
+        function exportOpml() {
+            const list = targetFeeds();
+            if (list.length === 0) return;
+
+            const host = location.hostname || 'rss-finder';
+            const date = new Date().toISOString().slice(0, 10);
+
+            const outlines = list.map(feed => {
+                const name = escapeXml(feed.title);
+                return `        <outline type="rss" text="${name}" title="${name}" xmlUrl="${escapeXml(feed.url)}" htmlUrl="${escapeXml(location.href)}"/>`;
+            });
+
+            const opml = [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<opml version="2.0">',
+                '    <head>',
+                `        <title>Feeds from ${escapeXml(host)}</title>`,
+                `        <dateCreated>${new Date().toUTCString()}</dateCreated>`,
+                '    </head>',
+                '    <body>',
+                ...outlines,
+                '    </body>',
+                '</opml>',
+                ''
+            ].join('\n');
+
+            downloadFile(opml, `rss-${host}-${date}.opml`, 'text/x-opml;charset=utf-8');
+            flash($('exportOpml'), 'check', 'Saved');
+        }
+
+        async function copyLinks() {
+            const list = targetFeeds();
+            if (list.length === 0) return;
+
+            try {
+                await navigator.clipboard.writeText(list.map(feed => feed.url).join('\n'));
+                flash($('copyAll'), 'check', 'Copied');
+            } catch (err) {}
+        }
+
+        function runScanDemo() {
+            resetList();
+            $('refreshButton').disabled = true;
+
+            DEMO_FEEDS.forEach((feed, i) => {
+                setTimeout(() => {
+                    addFeedToList(feed);
+
+                    if (i === DEMO_FEEDS.length - 1) {
+                        $('refreshButton').disabled = false;
+                    }
+                }, 1800 + i * 150);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSelectionUI();
+
+            $('selectToggle').addEventListener('click', () => setSelectMode(!selectMode));
+
+            $('selectAll').addEventListener('change', e => {
+                selected.clear();
+                if (e.target.checked) feeds.forEach(feed => selected.add(feed.url));
+                document.querySelectorAll('#rssLinks .feed-check').forEach(box => {
+                    box.checked = e.target.checked;
+                });
+                updateSelectionUI();
+            });
+
+            $('exportOpml').addEventListener('click', exportOpml);
+            $('copyAll').addEventListener('click', copyLinks);
+            $('refreshButton').addEventListener('click', runScanDemo);
+
+            runScanDemo();
+        });
     </script>
 </body>
 </html>
