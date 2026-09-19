@@ -479,7 +479,9 @@ async function startScanning(tabId, url) {
             ]
         });
 
-        const potentialFeeds = results[0]?.result || [];
+        const potentialFeeds = (results[0]?.result || []).filter(
+            f => !isRestrictedPage(f.url)
+        );
 
         if (
             !tabData.isScanning ||

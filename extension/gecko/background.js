@@ -292,7 +292,9 @@ async function startScanning(tabId, url) {
             code: `(${collectPotentialRSSFeeds.toString()})(${JSON.stringify(url)}, ${JSON.stringify(browser.i18n.getMessage('feedGuessTitle'))})`
         });
 
-        const potentialFeeds = results[0] || [];
+        const potentialFeeds = (results[0] || []).filter(
+            f => !isRestrictedPage(f.url)
+        );
         tabData.totalToCheck = potentialFeeds.length;
 
         await storageSet({
