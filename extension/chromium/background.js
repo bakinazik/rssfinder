@@ -115,6 +115,28 @@ async function collectPotentialRSSFeeds(currentUrl, guessTitle) {
         }
     });
 
+    document.querySelectorAll('a[href]').forEach(a => {
+        const type = a.getAttribute('type');
+        const href = a.getAttribute('href');
+
+        if (!href) return;
+
+        if (type && (
+            type.includes('rss+xml') ||
+            type.includes('atom+xml')
+        )) {
+            addFeed(href, a.title || a.textContent?.trim() || 'RSS', 'link');
+            return;
+        }
+
+        if (
+            /\b(rss|atom|feed)\b/i.test(href) ||
+            /\.(rss|atom)(?:[/?#]|$)/i.test(href)
+        ) {
+            addFeed(href, a.title || a.textContent?.trim() || guessTitle, 'guess');
+        }
+    });
+
     const commonPaths = [
         '/feed',
         '/rss',
