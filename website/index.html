@@ -276,7 +276,7 @@
         .plugin-widget .select-mode .copy-button { display: none; }
         .plugin-widget .select-mode .feed-url { pointer-events: none; }
 
-        .plugin-widget .feed-content { flex: 1; min-width: 0; }
+        .plugin-widget .feed-content { flex: 1; min-width: 0; text-align: left; }
 
         .plugin-widget .feed-title {
             font-size: 12px;
@@ -378,10 +378,13 @@
             color: var(--text);
         }
 
-        .btn:hover {
+        .btn.active {
             color: var(--primary);
-			border-color: var(--primary);
         }
+
+		.btn:hover{
+			background: var(--hover);
+		}
 
         .btn svg { width: 24px; height: 24px; }
         
